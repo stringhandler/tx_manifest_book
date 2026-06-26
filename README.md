@@ -4,6 +4,8 @@ A recipe-driven guide to writing **transaction manifests** — machine-readable 
 descriptions of multi-UTXO protocols on Bitcoin and Liquid, backed by
 [SimplicityHL](https://github.com/BlockstreamResearch/SimplicityHL) covenants.
 
+📖 **Read it online: <https://stringhandler.github.io/tx_manifest_book/>**
+
 This is an [mdBook](https://rust-lang.github.io/mdBook/). It is a cookbook in the
 style of the [Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/):
 a sequence of small, self-contained recipes, each solving one concrete problem and
