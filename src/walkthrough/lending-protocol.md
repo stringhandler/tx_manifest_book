@@ -1,13 +1,16 @@
 # The lending protocol
 
+> 📝 **Draft.** This chapter has not been reviewed yet — content may be incomplete or change.
+
 > 🚧 **This chapter is a stub.** It will tie every cookbook concept together on a
 > real peer-to-peer collateralised lending protocol on Liquid: NFT ownership,
 > Simplicity covenants, partial repayments, vault accumulation, and liquidation.
 
-The complete, current walkthrough already exists in the repository at
-[`example/lending/v1/walkthrough.md`](https://github.com/stringhandler/s-compose/blob/main/example/lending/v1/walkthrough.md).
-This chapter will adapt it into the cookbook, cross-linking each section back to
-the recipe that introduced the concept:
+The complete lending example lives in the repository at
+[`examples/lending/`](https://github.com/stringhandler/txmanifest-wallet/tree/main/examples/lending)
+(its [`txmanifest.json`](https://github.com/stringhandler/txmanifest-wallet/blob/main/examples/lending/txmanifest.json)
+plus the covenant `.simf` programs). This chapter will adapt it into the cookbook,
+cross-linking each section back to the recipe that introduced the concept:
 
 - **Lifecycle** → [recipe 6](../recipes/06-multiple-spending-paths.md)
 - **Params (compile, derived, NFT-encoded)** → recipes

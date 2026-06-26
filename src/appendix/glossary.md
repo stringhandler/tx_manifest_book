@@ -1,10 +1,10 @@
 # Glossary
 
-**Action / Method** — A single transaction recipe in a compose file: its inputs,
+**Action / Method** — A single transaction recipe in a manifest: its inputs,
 outputs, witnesses, and validations. *Action* (top-level) and *method* (inside a
 class) are structurally identical.
 
-**Attestation** — A BIP340 signature over the finalized compose document by a
+**Attestation** — A BIP340 signature over the finalized manifest by a
 developer, auditor, or counterparty. Tampering invalidates it.
 
 **Class** — A typed contract definition with named `fields` and `methods`. Each
@@ -19,7 +19,7 @@ identifier for the program's *structure*, independent of instance parameters.
 **Compile param** — A value baked into a covenant script at deploy time. Changing
 one changes the script's address. Stored in the instance file.
 
-**Compose file** — The static JSON protocol definition (`<name>.compose.json`).
+**Manifest** — The static JSON protocol definition (`txmanifest.json`).
 
 **Covenant** — A script that constrains how its output may be spent — e.g. by
 introspecting the spending transaction's inputs and outputs.

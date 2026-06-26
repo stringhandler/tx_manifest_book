@@ -1,5 +1,7 @@
 # Multiple spending paths
 
+> 📝 **Draft.** This chapter has not been reviewed yet — content may be incomplete or change.
+
 > **Problem.** Build a covenant that can be spent in more than one way — e.g. a
 > cooperative path and a cancel/timeout path — and select between them at spend
 > time.

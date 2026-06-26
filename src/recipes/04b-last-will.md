@@ -25,16 +25,16 @@ to re-lock; the inheritor is the dead-man's switch.
 ## The program
 
 The contract lives in
-[`last_will.simf`](https://github.com/stringhandler/s-compose/blob/main/example/book/03_last_will/last_will.simf).
-Two adaptations from the upstream example make it work with compose-wallet:
+[`last_will.simf`](https://github.com/stringhandler/txmanifest-wallet/blob/main/examples/last_will/last_will.simf).
+Two adaptations from the upstream example make it work with tx-manifest-wallet:
 
 1. **The keys and the timelock are compile parameters** (`param::INHERITOR_PUB_KEY`,
    `param::HOT_PUB_KEY`, `param::COLD_PUB_KEY`, and `param::INHERIT_BLOCKS`) instead
-   of hardcoded constants, so the compose file can wire them — exactly like
+   of hardcoded constants, so the manifest can wire them — exactly like
    `PUB_KEY` in Hello World.
 2. **The path is chosen by a dedicated `SPEND_PATH` witness, and each signature
    is its own witness.** The upstream version nested the signatures *inside* the
-   selector; compose-wallet computes signatures as standalone `Signature`
+   selector; tx-manifest-wallet computes signatures as standalone `Signature`
    witnesses, so we split them out (the idiom from
    [Witnesses](./04-witnesses.md)).
 
@@ -79,7 +79,7 @@ one-minute Liquid blocks). `recursive_covenant` (used by the hot-key refresh)
 forces the spend to recreate the *same* covenant in output 0 and have the explicit
 fee in output 1, with nothing else.
 
-## The compose file
+## The manifest
 
 A will is something you *deploy once* and then operate — exactly what a
 [**class**](../getting-started/anatomy.md) models. We define a
@@ -201,7 +201,7 @@ wallet's oracle key (take it from `info` — see [Setup](../getting-started/setu
 the heir gives you `INHERITOR_PUB_KEY`. Each param value is written into the
 compile params, so `will_out`'s covenant address is computed from the keys you
 just supplied — *before* the instance exists. After broadcast, `create_instance`
-writes those same three keys into `last_will.instance.json`.
+writes those same three keys into `txmanifest.instance.json`.
 
 > **One instance per will.** Unlike Hello World — which had no `classes` and so
 > [no instance file](./01-hello-world-p2pk.md#no-instance-file) — the keys here
@@ -320,8 +320,9 @@ them from a **params file**: a flat JSON object of `param → value` that pre-fi
 (or fully supplies) the prompts.
 
 You don't even pass a flag. The tool **auto-discovers** a file named
-`<contract>.<network>.json` next to the compose file — so for `testnet` it loads
-`last_will.testnet.json` from `03_last_will/`:
+`<stem>.<network>.json` next to the manifest (the `<stem>` is the manifest's
+filename stem) — so for `testnet` it loads `txmanifest.testnet.json` from
+`examples/last_will/`:
 
 ```json
 {
@@ -342,7 +343,7 @@ the book ships scripts that do it for you:
 ```powershell
 .\create_wallet.ps1          # owner wallet -> wallet.json
 .\create_inherit_wallet.ps1  # heir wallet  -> wallet-inherit.json
-.\make_params.ps1            # reads both, writes 03_last_will/last_will.testnet.json
+.\make_params.ps1            # reads both, writes examples/last_will/txmanifest.testnet.json
 ```
 
 `make_params.ps1` runs `info` on each wallet, pulls out the signing and oracle
@@ -353,15 +354,14 @@ just makes every value explicit.)
 
 ## Run it
 
-Run everything from the book directory (`example/book/`), where the scripts put
-the wallets and params file. With the params file in place, **construct** the
-will — `Fund` reads every value from the file, so there's nothing to type. It
-locks the funds and writes `03_last_will/last_will.instance.json`:
+Run everything from the repository root, where the scripts put the wallets and
+params file. With the params file in place, **construct** the will — `Fund` reads
+every value from the file, so there's nothing to type. It locks the funds and
+writes `examples/last_will/txmanifest.instance.json`:
 
 ```sh
-cd example/book
-cargo run --manifest-path ../../tools/compose-wallet/Cargo.toml -- \
-  run-compose 03_last_will/last_will.compose.json Fund --network testnet --wallet wallet.json
+txw run examples/last_will/txmanifest.json Fund \
+  --network testnet --wallet wallet.json
 ```
 
 Then the cold-key break-out is the most straightforward spend to run, since your
@@ -369,8 +369,8 @@ oracle key signs it — and you don't re-enter any keys, because they're read fr
 the instance:
 
 ```sh
-cargo run --manifest-path ../../tools/compose-wallet/Cargo.toml -- \
-  run-compose 03_last_will/last_will.compose.json ColdBreak --network testnet --wallet wallet.json
+txw run examples/last_will/txmanifest.json ColdBreak \
+  --network testnet --wallet wallet.json
 ```
 
 `ColdBreak` finds the `last_will` UTXO in the state file, rebuilds the covenant

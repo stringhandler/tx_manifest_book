@@ -1,5 +1,7 @@
 # Asset issuance & NFTs
 
+> 📝 **Draft.** This chapter has not been reviewed yet — content may be incomplete or change.
+
 > **Problem.** Mint Liquid assets — including single-unit NFTs used as bearer
 > tokens — as part of an action, and derive their asset IDs.
 

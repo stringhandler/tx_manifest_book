@@ -14,4 +14,4 @@ The type strings used in `compile_params`, class `fields`, and action `params`.
 | `address` | string | A bech32/blech32 address (used by action params) |
 
 > Integer field values are written as decimal strings in instance files; byte
-> types as hex strings. See [`Spec.md` §4.2 and §12](https://github.com/stringhandler/s-compose/blob/main/Spec.md).
+> types as hex strings. See [`Spec.md` §4.2 and §12](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md).

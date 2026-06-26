@@ -4,9 +4,9 @@
 
 # Getting Started
 
-- [What is a compose file?](./getting-started/what-is-compose.md)
+- [What is a manifest?](./getting-started/what-is-a-manifest.md)
 - [Setup](./getting-started/setup.md)
-- [Anatomy of a compose file](./getting-started/anatomy.md)
+- [Anatomy of a manifest](./getting-started/anatomy.md)
 
 # Cookbook
 
@@ -17,16 +17,16 @@
 - [Outputs & destinations](./recipes/03-outputs-and-destinations.md)
 - [Witnesses](./recipes/04-witnesses.md)
 - [Worked example: a Last Will covenant](./recipes/04b-last-will.md)
-- [Covenant UTXO types](./recipes/05-covenant-utxo-types.md)
-- [Multiple spending paths](./recipes/06-multiple-spending-paths.md)
-- [Formulas & derived params](./recipes/07-formulas-and-derived-params.md)
-- [Asset issuance & NFTs](./recipes/08-issuance-and-nfts.md)
-- [Hooks & tapleaf compute](./recipes/09-hooks-and-tapleaf.md)
-- [Instance, state & constructors](./recipes/10-instance-state-constructors.md)
+- [Covenant UTXO types (draft)](./recipes/05-covenant-utxo-types.md)
+- [Multiple spending paths (draft)](./recipes/06-multiple-spending-paths.md)
+- [Formulas & derived params (draft)](./recipes/07-formulas-and-derived-params.md)
+- [Asset issuance & NFTs (draft)](./recipes/08-issuance-and-nfts.md)
+- [Hooks & tapleaf compute (draft)](./recipes/09-hooks-and-tapleaf.md)
+- [Instance, state & constructors (draft)](./recipes/10-instance-state-constructors.md)
 
 # Full Walkthrough
 
-- [The lending protocol](./walkthrough/lending-protocol.md)
+- [The lending protocol (draft)](./walkthrough/lending-protocol.md)
 
 # Appendix
 

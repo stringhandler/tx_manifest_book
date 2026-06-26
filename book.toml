@@ -1,15 +1,14 @@
 [book]
-title = "The SimplicityCompose Cookbook"
-description = "A recipe-driven guide to writing compose files for multi-UTXO Bitcoin and Liquid protocols."
-authors = ["SimplicityCompose contributors"]
+title = "The tx-manifest Cookbook"
+description = "A recipe-driven guide to writing transaction manifests for multi-UTXO Bitcoin and Liquid protocols."
+authors = ["tx-manifest contributors"]
 language = "en"
 src = "src"
 
 [output.html]
 default-theme = "rust"
 preferred-dark-theme = "ayu"
-git-repository-url = "https://github.com/stringhandler/s-compose"
-edit-url-template = "https://github.com/stringhandler/s-compose/edit/main/docs/{path}"
+git-repository-url = "https://github.com/stringhandler/txmanifest-wallet"
 no-section-label = false
 
 [output.html.fold]

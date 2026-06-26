@@ -5,7 +5,7 @@
 
 The `Pay` action from [recipe 1](./01-hello-world-p2pk.md) would happily let you
 pay an output of zero satoshis. This recipe adds a validation rule to stop that,
-and along the way pins down the two kinds of parameters a compose file deals with.
+and along the way pins down the two kinds of parameters a manifest deals with.
 
 ## Two kinds of parameters
 
@@ -126,7 +126,7 @@ Validations are invisible on the happy path. To see one fire, run `Pay` and
 enter `0` when prompted for `amount_sat`:
 
 ```sh
-cargo run -- run-compose ../../p2pk_simplicity.compose.json Pay \
+txw run examples/p2pk/txmanifest.json Pay \
   --network testnet --wallet wallet.json
 # → aborts with: INVALID_AMOUNT: Amount must be greater than zero
 ```
@@ -141,7 +141,7 @@ values and reference it with `--params`:
 ```
 
 ```sh
-cargo run -- run-compose ../../p2pk_simplicity.compose.json Pay \
+txw run examples/p2pk/txmanifest.json Pay \
   --network testnet --wallet wallet.json --params pay-params.json
 ```
 

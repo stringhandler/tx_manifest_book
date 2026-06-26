@@ -1,14 +1,14 @@
 # CLI reference
 
-The `compose-wallet` CLI ([`tools/compose-wallet`](https://github.com/stringhandler/s-compose/tree/main/tools/compose-wallet))
-executes compose actions interactively. Run from inside `tools/compose-wallet`
-with `cargo run -- <subcommand>`, or build a binary and call `compose-wallet`
-directly.
+The `tx-manifest-wallet` CLI ([`txmanifest_wallet`](https://github.com/stringhandler/txmanifest-wallet/tree/main/txmanifest_wallet))
+executes manifest actions interactively. This book invokes it as `txw <subcommand>`
+(an alias for `tx-manifest-wallet` — see [Setup](../getting-started/setup.md) for
+the install options). Manifest paths are relative to your current directory.
 
 ## Commands
 
-### `validate <compose_file>`
-Statically check a compose file's schema and report obvious problems — without
+### `validate <manifest>`
+Statically check a manifest's schema and report obvious problems — without
 touching the network, wallet, or filesystem. Catches unknown `utxo_type`
 references, outputs missing a required `amount_sat`, duplicate input/output/
 validation ids, malformed destinations, unknown validation rule types,
@@ -17,14 +17,14 @@ lifecycle transitions that don't match any action. Exits non-zero if any errors
 are found (warnings alone still exit zero).
 
 ```sh
-cargo run -- validate ../../p2pk_simplicity.compose.json
+txw validate examples/p2pk/txmanifest.json
 ```
 
 > Future versions will add deeper checks (compiling SimplicityHL leaves,
 > verifying formula references resolve, checking `canonical_cmr` values).
 
-### `describe <compose_file>`
-Explore a compose file interactively. Presents a menu of the contract's overview,
+### `describe <manifest>`
+Explore a manifest interactively. Presents a menu of the contract's overview,
 classes, and standalone actions; drill into any class to list its fields and
 methods, and into any action to see its params, inputs, outputs, witnesses, and
 validations — without reading the raw JSON. When stdout is not a terminal (e.g.
@@ -32,11 +32,11 @@ piped to a file or `less`), it prints a full non-interactive dump of everything
 instead.
 
 ```sh
-cargo run -- describe ../../example/lending/v1/lending.compose.json
+txw describe examples/lending/txmanifest.json
 ```
 
-### `run-compose <compose_file> <action_name>`
-Walk through the lifecycle of a compose action interactively: resolve params and
+### `run <manifest> <action>`
+Walk through the lifecycle of a manifest action interactively: resolve params and
 inputs, validate, build the PSET, dry-run the Simplicity covenant, sign, and
 broadcast.
 
@@ -68,7 +68,7 @@ Sync wallet state against an Esplora server and print the balance.
 Print the last known balance from persisted state (no network call).
 `--wallet <file>`, `--data-dir <dir>`.
 
-### `prepare <compose_file> <action_name>`
+### `prepare <manifest> <action>`
 Ensure the wallet has the UTXOs an action needs; broadcasts a split transaction if
 not. `--wallet`, `--esplora`, `--data-dir`, `--split-amount <sats>` (default
 `10000`).
@@ -85,12 +85,11 @@ With no args, print config. With `key value`, set it. Valid keys:
 ## Typical session
 
 ```sh
-cd tools/compose-wallet
-cargo run -- config default_network testnet
-cargo run -- config default_esplora https://blockstream.info/liquidtestnet/api
-cargo run -- create-wallet --out wallet.json
-cargo run -- info --wallet wallet.json          # → fund this address
-cargo run -- sync --wallet wallet.json
-cargo run -- prepare ../../p2pk_simplicity.compose.json Pay --wallet wallet.json
-cargo run -- run-compose ../../p2pk_simplicity.compose.json Pay --network testnet --wallet wallet.json
+txw config default_network testnet
+txw config default_esplora https://blockstream.info/liquidtestnet/api
+txw create-wallet --out wallet.json
+txw info --wallet wallet.json          # → fund this address
+txw sync --wallet wallet.json
+txw prepare examples/p2pk/txmanifest.json Pay --wallet wallet.json
+txw run examples/p2pk/txmanifest.json Pay --network testnet --wallet wallet.json
 ```

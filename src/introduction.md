@@ -1,7 +1,7 @@
 # Introduction
 
-Welcome to **The SimplicityCompose Cookbook** — a recipe-driven guide to writing
-*compose files*: machine-readable descriptions of multi-UTXO protocols on Bitcoin
+Welcome to **The tx-manifest Cookbook** — a recipe-driven guide to writing
+*manifests*: machine-readable descriptions of multi-UTXO protocols on Bitcoin
 and Liquid.
 
 This book is not a top-to-bottom reference manual. It is a **cookbook** in the
@@ -21,7 +21,7 @@ jump to the recipe that matches what you are trying to do.
 
 ## How the book is organised
 
-1. **Getting Started** explains what a compose file *is*, gets the `compose-wallet`
+1. **Getting Started** explains what a manifest *is*, gets the `tx-manifest-wallet`
    CLI built and a wallet ready, and dissects the top-level structure of a file.
 2. **The Cookbook** is the heart of the book. Each recipe builds on the previous
    one, starting from a no-covenant warm-up (splitting a UTXO) and a single key
@@ -38,20 +38,20 @@ Every recipe in the Cookbook follows the same shape:
 
 > **Problem** — one sentence describing the goal.
 >
-> **Recipe** — the compose JSON you can copy and adapt.
+> **Recipe** — the manifest JSON you can copy and adapt.
 >
 > **How it works** — an annotated tour of the new fields.
 >
-> **Run it** — the actual `compose-wallet` commands to execute the action.
+> **Run it** — the actual `tx-manifest-wallet` commands to execute the action.
 >
 > **Try next** — where to go from here.
 
 Every JSON snippet and command in this book is drawn from real files in the
-repository (`p2pk_simplicity.compose.json`, `example/lending/`) and the real CLI
-in `tools/compose-wallet` — nothing here is invented.
+repository (`examples/p2pk/txmanifest.json`, `example/lending/`) and the real CLI
+in `txmanifest_wallet` — nothing here is invented.
 
-> **The authoritative reference** is [`Spec.md`](https://github.com/stringhandler/s-compose/blob/main/Spec.md)
+> **The authoritative reference** is [`Spec.md`](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md)
 > in the repository root. When this book and the spec disagree, the spec wins.
 > This cookbook aims to teach; the spec aims to be complete.
 
-Let's start with the big picture: [what is a compose file?](./getting-started/what-is-compose.md)
+Let's start with the big picture: [what is a manifest?](./getting-started/what-is-a-manifest.md)

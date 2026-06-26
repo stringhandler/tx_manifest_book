@@ -1,14 +1,14 @@
 # Wallet implementation guide
 
-**Audience:** Wallet implementors consuming compose files to build and sign
+**Audience:** Wallet implementors consuming manifests to build and sign
 transactions.
 
-The [`compose-wallet`](./cli-reference.md) CLI used throughout this book is an
+The [`tx-manifest-wallet`](./cli-reference.md) CLI used throughout this book is an
 *example* implementation of the lifecycle described here. Any wallet can consume
-a compose file by following the same steps. This page describes the execution
-lifecycle a wallet follows when executing an action from a compose file. Field
+a manifest by following the same steps. This page describes the execution
+lifecycle a wallet follows when executing an action from a manifest. Field
 definitions are not duplicated here; refer to
-[`Spec.md`](https://github.com/stringhandler/s-compose/blob/main/Spec.md) for the
+[`Spec.md`](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md) for the
 authoritative field reference.
 
 ---
@@ -105,8 +105,8 @@ rerun from step 6. Signatures are not yet present at this point, so there is no
 witness-invalidation problem.
 
 Once the user confirms, construct the PSET. **This is the boundary between
-compose-level reasoning and standard Elements/Bitcoin wallet machinery.** A
-wallet that does not implement SimplicityCompose can receive the PSET from this
+manifest-level reasoning and standard Elements/Bitcoin wallet machinery.** A
+wallet that does not implement tx-manifest can receive the PSET from this
 point onwards and handle signing and broadcast normally.
 
 ### 11. Wallet signs
@@ -121,11 +121,11 @@ witnesses from `provided_inputs.witnesses` are included verbatim.
 Execute the covenant scripts on all inputs against the signed PSET. This is a
 local simulation of on-chain script execution; it does not broadcast.
 
-A dry-run failure indicates a bug in the compose file or wallet implementation,
+A dry-run failure indicates a bug in the manifest or wallet implementation,
 **not a user error**. Surface it as an internal error with the relevant input
 index and script. Do not ask the user to retry.
 
-This step is distinct from the compose validations in steps 7–8. Compose
+This step is distinct from the manifest validations in steps 7–8. Manifest
 validations are pre-flight business-logic checks expressible without a full
 Simplicity interpreter. The dry-run is the final cryptographic and covenantal
 correctness check, confirming that the on-chain scripts will accept the
@@ -160,7 +160,7 @@ The following are **not** available at build time:
 
 ## Error codes
 
-Error codes are `u16` values. The compose file's top-level `errors` field maps
+Error codes are `u16` values. The manifest's top-level `errors` field maps
 numeric codes to English-language descriptions:
 
 ```json
@@ -175,7 +175,7 @@ codes. The wallet looks up the code in `errors` and displays the description to
 the user.
 
 **Localisation.** Other locales are provided as separate JSON files sharing the
-same numeric keys — the compose file itself carries only the English
+same numeric keys — the manifest itself carries only the English
 descriptions. Wallet implementations that support multiple locales load the
 appropriate locale file and index into it by the same code.
 
@@ -183,7 +183,7 @@ appropriate locale file and index into it by the same code.
 
 ## Notes on `provided_inputs`
 
-When a compose file arrives with a `provided_inputs` section (e.g. from a DEX
+When a manifest arrives with a `provided_inputs` section (e.g. from a DEX
 front-end or counterparty):
 
 - Treat every entry in `provided_inputs.inputs` as fixed — do not prompt the user
@@ -197,5 +197,5 @@ front-end or counterparty):
   11).
 
 `provided_inputs` data arrives from an untrusted source. See
-[`Spec.md`](https://github.com/stringhandler/s-compose/blob/main/Spec.md) Section
+[`Spec.md`](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md) Section
 17 for the full security requirements.

@@ -34,5 +34,5 @@ in output/input `amount_sat`, validation `expr`, hook `set` values, and witness
 | `index_of(id)` | (input or output id) → u32 | Transaction index of a named input/output |
 | `concat(a, b, …)` | (bytes…) → bytes | Byte concatenation (`OP_RETURN` `data` only) |
 
-See [`Spec.md` §9](https://github.com/stringhandler/s-compose/blob/main/Spec.md)
+See [`Spec.md` §9](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md)
 for the authoritative grammar.

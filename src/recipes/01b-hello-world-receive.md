@@ -9,14 +9,14 @@ Part 1's `Pay` action only *built* a covenant output; it locked funds into a
 `Receive` action, which *spends* it. Three new things have to come together:
 
 1. **The state file locates the UTXO.** We never type a txid — the tool reads
-   `p2pk.state.json` and finds the live `p2pk_output` entry.
+   `txmanifest.state.json` and finds the live `p2pk_output` entry.
 2. **The same key rebuilds the same address.** The output is locked at an address
    derived from the recipient's pubkey. To spend it, the tool must recompile
    `p2pk.simf` with that *same* key and confirm the address matches.
 3. **A witness satisfies the program.** `p2pk.simf` demands a BIP340 signature
    over the transaction. `Receive` provides one.
 
-> **Prerequisites.** You must have run `Pay` first, so `p2pk.state.json` holds a
+> **Prerequisites.** You must have run `Pay` first, so `txmanifest.state.json` holds a
 > `p2pk_output`. Crucially, in Part 1 you must have locked the funds to **one of
 > your own wallet's keys** (e.g. the key from `info`) — because spending now
 > requires *signing* with that key's private half. If you paid to someone else's
@@ -24,7 +24,7 @@ Part 1's `Pay` action only *built* a covenant output; it locked funds into a
 
 ## The `Receive` action
 
-Add this action alongside `Pay` in `p2pk.compose.json`:
+Add this action alongside `Pay` in `txmanifest.json`:
 
 ```json
     "Receive": {
@@ -83,7 +83,7 @@ Add this action alongside `Pay` in `p2pk.compose.json`:
 
 **The input comes from the state file, not your wallet.** `p2pk_in`'s
 `utxo_source` is `{ "utxo_type": "p2pk_output" }`. Unlike a `"wallet"` input,
-this tells the tool to look in `p2pk.state.json` for a live UTXO of that type —
+this tells the tool to look in `txmanifest.state.json` for a live UTXO of that type —
 the very one `Pay` recorded. That's why this lesson "requires the state file":
 without it the tool has no idea the UTXO exists.
 
@@ -134,14 +134,14 @@ covenants with multiple spending paths add a selector witness; that's
 ## Run it
 
 With a funded, synced wallet and a `p2pk_output` already in the state file from
-Part 1, run from `tools/compose-wallet`:
+Part 1, run:
 
 ```sh
-cargo run -- run-compose ../../example/book/02_hello_world/p2pk.compose.json Receive \
+txw run examples/p2pk/txmanifest.json Receive \
   --network testnet --wallet wallet.json
 ```
 
-`run-compose` prompts for `pubkey` (use the **same** key as in `Pay`), finds the
+`run` prompts for `pubkey` (use the **same** key as in `Pay`), finds the
 `p2pk_output` in the state file, rebuilds the covenant address to confirm the
 match, builds the PSET, and computes the signature. Before broadcasting it runs a
 **Simplicity dry-run** — actually executing the covenant program against the
@@ -155,7 +155,7 @@ and updates the state file.
 ## The state file after spending
 
 A successful `Receive` consumes the covenant UTXO, so the tool **removes** it from
-`p2pk.state.json`. If that was the only entry, `utxos` is now empty:
+`txmanifest.state.json`. If that was the only entry, `utxos` is now empty:
 
 ```json
 {

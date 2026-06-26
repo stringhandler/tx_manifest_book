@@ -5,14 +5,14 @@
 
 After the no-covenant warm-up in [Splitting a UTXO](./00-splitting-utxos.md), this
 is the first contract with a real **covenant**: an on-chain program that decides
-whether a UTXO may be spent. It is the compose-file equivalent of
+whether a UTXO may be spent. It is the manifest equivalent of
 `println!("Hello, world!")`.
 
 This lesson covers only the **`Pay`** action — locking funds into the covenant.
 *Spending* those funds back out (the `Receive` action) needs a signature witness
 and gets its own lesson later. The full file is
-[`p2pk.compose.json`](https://github.com/stringhandler/s-compose/blob/main/example/book/02_hello_world/p2pk.compose.json)
-under `example/book/02_hello_world/`.
+[`txmanifest.json`](https://github.com/stringhandler/txmanifest-wallet/blob/main/examples/p2pk/txmanifest.json)
+under `examples/p2pk/`.
 
 ## Introducing Simplicity
 
@@ -23,17 +23,17 @@ in a `.simf` file. The compiler turns it into a 32-byte commitment (its CMR),
 which becomes the output's Taproot address. To spend the output you must supply a
 *witness* that makes the program succeed.
 
-A compose file does not contain the program; it **points at the `.simf` file** and
+A manifest does not contain the program; it **points at the `.simf` file** and
 supplies its compile-time parameters. So a real contract is now **two files** that
 live side by side:
 
 ```text
 your-book-folder/
-├── p2pk.compose.json     ← the compose file (references "./p2pk.simf")
+├── txmanifest.json     ← the manifest (references "./p2pk.simf")
 └── p2pk.simf             ← the Simplicity program, compiled into the address
 ```
 
-The `source` path in the compose file is resolved relative to the compose file's
+The `source` path in the manifest is resolved relative to the manifest's
 own directory, so keep the `.simf` next to it.
 
 ### The program: `p2pk.simf`
@@ -64,16 +64,16 @@ Four pieces:
 In plain English: *"this output may be spent only by a signature from `PUB_KEY`
 over this transaction."* That is pay-to-public-key.
 
-## The compose file
+## The manifest
 
 ### Start with a skeleton
 
-Create `p2pk.compose.json` next to `p2pk.simf`, with every top-level section
+Create `txmanifest.json` next to `p2pk.simf`, with every top-level section
 present but empty:
 
 ```json
 {
-  "compose_version": "0.1.0",
+  "manifest_version": "0.1.0",
   "attestation_version": "1",
   "protocol": "p2pk-simplicity",
   "description": "Hello World — Pay-to-public-key using a Simplicity checksig program on Liquid.",
@@ -85,7 +85,7 @@ present but empty:
 ```
 
 That is the whole shape: the **envelope** (the first five fields, covered in
-[Anatomy of a compose file](../getting-started/anatomy.md)) followed by two empty
+[Anatomy of a manifest](../getting-started/anatomy.md)) followed by two empty
 data sections we'll fill in below — the UTXO type and the `Pay` action. There's
 no `compile_params` block: the recipient's key is a *runtime* parameter of the
 action, not a value baked in at deploy time. (And no `lifecycle`, since this
@@ -181,8 +181,8 @@ The key line is the output's `destination`: alongside `utxo_type` it carries a
 into the program's `param::PUB_KEY` just for this output.
 
 With both sections filled in you have the complete file — identical to
-[`p2pk.compose.json`](https://github.com/stringhandler/s-compose/blob/main/example/book/02_hello_world/p2pk.compose.json)
-under `example/book/02_hello_world/`.
+[`txmanifest.json`](https://github.com/stringhandler/txmanifest-wallet/blob/main/examples/p2pk/txmanifest.json)
+under `examples/p2pk/`.
 
 ## How it works
 
@@ -215,21 +215,21 @@ is the next lesson.
 ## Run it
 
 Make sure you have a funded, synced wallet ([Setup](../getting-started/setup.md)),
-and that `p2pk.simf` sits next to the compose file. From `tools/compose-wallet`:
+and that `p2pk.simf` sits next to the manifest. From the repository root:
 
 ```sh
 # Optional: check the schema first.
-cargo run -- validate ../../example/book/02_hello_world/p2pk.compose.json
+txw validate examples/p2pk/txmanifest.json
 
 # Make sure the wallet has a UTXO big enough for Pay.
-cargo run -- prepare ../../example/book/02_hello_world/p2pk.compose.json Pay --wallet wallet.json
+txw prepare examples/p2pk/txmanifest.json Pay --wallet wallet.json
 
 # Lock funds into a p2pk output. You'll be prompted for pubkey and amount_sat.
-cargo run -- run-compose ../../example/book/02_hello_world/p2pk.compose.json Pay \
+txw run examples/p2pk/txmanifest.json Pay \
   --network testnet --wallet wallet.json
 ```
 
-`run-compose` prompts for `pubkey` and `amount_sat`, compiles `p2pk.simf` to derive
+`run` prompts for `pubkey` and `amount_sat`, compiles `p2pk.simf` to derive
 the covenant address, builds the PSET, signs the wallet input, and broadcasts. The
 new `p2pk_output` is recorded in the state file, ready to be spent in a later
 lesson.
@@ -245,7 +245,7 @@ lesson.
 ## The state file
 
 After a successful `Pay`, the tool records the new covenant output in a **state
-file** next to your compose file, auto-named `p2pk.state.json`:
+file** next to your manifest, auto-named `txmanifest.state.json`:
 
 ```json
 {
@@ -274,7 +274,7 @@ when an action creates new covenant outputs, it adds them.
 
 A contract has up to two companion files: an **instance file** (compile-time
 field values) and a **state file** (live UTXOs). This lesson produced only the
-state file — there is **no `p2pk.instance.json`**.
+state file — there is **no `txmanifest.instance.json`**.
 
 Why? Instance files exist to persist a `class`'s `fields`. This contract declares
 no `classes` at all — and the recipient's key (the `pubkey` action parameter) is

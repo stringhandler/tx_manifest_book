@@ -1,12 +1,12 @@
-# Anatomy of a compose file
+# Anatomy of a manifest
 
-Before writing any recipes, let's look at the skeleton every compose file shares.
-A compose file is a single JSON document. At the top level it has an **envelope**
+Before writing any recipes, let's look at the skeleton every manifest shares.
+A manifest is a single JSON document. At the top level it has an **envelope**
 of metadata fields followed by the data sections.
 
 ```json
 {
-  "compose_version": "0.1.0",
+  "manifest_version": "0.1.0",
   "attestation_version": "1",
   "protocol": "p2pk-simplicity",
   "description": "Pay-to-public-key using a Simplicity checksig program on Liquid.",
@@ -24,7 +24,7 @@ of metadata fields followed by the data sections.
 
 | Field | Required | Purpose |
 |-------|----------|---------|
-| `compose_version` | yes | Version of the SimplicityCompose format itself. Current: `"0.1.0"`. |
+| `manifest_version` | yes | Version of the tx-manifest format itself. Current: `"0.1.0"`. |
 | `protocol` | yes | Kebab-case protocol identifier, e.g. `"simplicity-lending"`. |
 | `description` | yes | Free-text summary of the whole protocol. |
 | `chain` | no | `"bitcoin"`, `"liquid"`/`"elements"`, or `"cross-chain"`. Defaults to `"elements"`. |
@@ -161,7 +161,7 @@ diagrams from it, but nothing on-chain depends on it.
 
 ## The execution model, in brief
 
-When you run an action, a tool like `compose-wallet` performs roughly these steps:
+When you run an action, a tool like `tx-manifest-wallet` performs roughly these steps:
 
 1. **Resolve parameters** — load compile params, auto-derive wallet keys, apply overrides.
 2. **Resolve inputs** — find each input UTXO (from state file, wallet, or `provided_inputs`).
@@ -172,6 +172,6 @@ When you run an action, a tool like `compose-wallet` performs roughly these step
 7. **Update the state file** — remove spent UTXOs, add new covenant outputs.
 
 You don't need to memorise this yet — each recipe touches the parts it needs. The
-full sequence is in [`Spec.md` §11](https://github.com/stringhandler/s-compose/blob/main/Spec.md).
+full sequence is in [`Spec.md` §11](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md).
 
 With the skeleton in hand, let's write our first contract.

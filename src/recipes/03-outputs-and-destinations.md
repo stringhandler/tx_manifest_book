@@ -127,7 +127,7 @@ exactly what an action will produce without broadcasting, export the PSET and
 decode it:
 
 ```sh
-cargo run -- run-compose ../../p2pk_simplicity.compose.json Pay \
+txw run examples/p2pk/txmanifest.json Pay \
   --network testnet --wallet wallet.json --export-pset pay.pset.json
 ```
 

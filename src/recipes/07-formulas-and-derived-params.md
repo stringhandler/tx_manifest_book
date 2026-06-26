@@ -1,5 +1,7 @@
 # Formulas & derived params
 
+> 📝 **Draft.** This chapter has not been reviewed yet — content may be incomplete or change.
+
 > **Problem.** Compute amounts, indices, and parameter values from other values
 > instead of hard-coding them.
 
@@ -15,5 +17,5 @@
 > - **Derived params** (`"derived": true`): interest = `PRINCIPAL_AMOUNT *
 >   PRINCIPAL_INTEREST_RATE / 10000`, and params derived from issuance outpoints.
 
-See [`Spec.md` §9](https://github.com/stringhandler/s-compose/blob/main/Spec.md)
+See [`Spec.md` §9](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md)
 for the formula grammar in the meantime.

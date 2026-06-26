@@ -1,5 +1,7 @@
 # Hooks & tapleaf compute
 
+> 📝 **Draft.** This chapter has not been reviewed yet — content may be incomplete or change.
+
 > **Problem.** Compute and store values mid-action — especially covenant script
 > hashes that depend on other covenant script hashes.
 
@@ -13,5 +15,5 @@
 > - **Circular dependencies**: when two covenants each reference the other's hash,
 >   seed with 32 zero bytes and iterate to convergence.
 
-See [`Spec.md` §5.5 and §11 Step 3](https://github.com/stringhandler/s-compose/blob/main/Spec.md)
+See [`Spec.md` §5.5 and §11 Step 3](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md)
 in the meantime.

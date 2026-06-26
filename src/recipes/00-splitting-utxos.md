@@ -4,21 +4,19 @@
 > warm-up, and a common prerequisite for actions that need several discrete input
 > UTXOs.
 
-Before the first *real* contract, here is the gentlest possible compose file: no
+Before the first *real* contract, here is the gentlest possible manifest: no
 covenants, no witnesses, no compile parameters. Just one input and a handful of
 outputs, all to your own wallet. It does one useful thing — split a UTXO into four
-equal pieces — and in doing so introduces the bare skeleton every compose file
+equal pieces — and in doing so introduces the bare skeleton every manifest
 shares.
 
-The full file is
-[`utxo_split.compose.json`](https://github.com/stringhandler/s-compose/blob/main/utxo_split.compose.json)
-in the repository root.
+The full manifest is reproduced inline below — save it as `txmanifest.json`.
 
 ## Recipe
 
 ```json
 {
-  "compose_version": "0.1.0",
+  "manifest_version": "0.1.0",
   "attestation_version": "1",
   "protocol": "utxo-split",
   "description": "Split one wallet UTXO into four equal wallet UTXOs.",
@@ -68,10 +66,10 @@ in the repository root.
 ## How it works
 
 **The whole envelope, and nothing else.** This file has the required top-level
-fields (`compose_version`, `protocol`, `description`, `chain`) and a single
+fields (`manifest_version`, `protocol`, `description`, `chain`) and a single
 `actions` block. There are no `utxo_types` (no on-chain covenant states), no
-`compile_params` (nothing is baked into a script), and no `classes`. A compose
-file can be this small.
+`compile_params` (nothing is baked into a script), and no `classes`. A manifest
+can be this small.
 
 **One action parameter.** `amount_each` is an action `param` of type `u64` — you
 supply it each time you run `Split`. It is *not* a compile param: it doesn't change
@@ -96,13 +94,13 @@ spend a *covenant* — which is exactly what the next recipe introduces.
 ## Run it
 
 Make sure you have a funded, synced wallet ([Setup](../getting-started/setup.md)).
-From `tools/compose-wallet`:
+From the repository root:
 
 ```sh
-# Optional: check the compose file's schema before running anything.
-cargo run -- validate ../../utxo_split.compose.json
+# Optional: check the manifest's schema before running anything.
+txw validate txmanifest.json
 
-cargo run -- run-compose ../../utxo_split.compose.json Split \
+txw run txmanifest.json Split \
   --network testnet --wallet wallet.json
 ```
 
@@ -111,17 +109,17 @@ outputs plus change, signs, and broadcasts. Afterwards your wallet holds four
 fresh UTXOs.
 
 > **The built-in shortcut.** Because splitting is so common, the CLI ships it as a
-> first-class command — no compose file needed:
+> first-class command — no manifest needed:
 >
 > ```sh
-> cargo run -- split -n 4 --asset lbtc --amount-each 10000 --wallet wallet.json
+> txw split -n 4 --asset lbtc --amount-each 10000 --wallet wallet.json
 > ```
 >
 > And `prepare` will split automatically when an action needs more UTXOs than the
 > wallet currently has:
 >
 > ```sh
-> cargo run -- prepare ../../p2pk_simplicity.compose.json Pay --wallet wallet.json
+> txw prepare examples/p2pk/txmanifest.json Pay --wallet wallet.json
 > ```
 
 ## Try next

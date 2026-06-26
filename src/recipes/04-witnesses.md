@@ -129,7 +129,7 @@ locally rather than rejected by the network.
 
 ## Not yet wired up
 
-The [spec](https://github.com/stringhandler/s-compose/blob/main/Spec.md) and some
+The [spec](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md) and some
 example files reference two further witness types — **`formula`** (a computed
 value such as `index_of(some_output)`) and **`taproot_leaf`** (a leaf/control-block
 selector). The current reference tool **does not consume these** — only
@@ -140,7 +140,7 @@ the witness is simply zeroed like any unsupplied value.
 
 ## See also
 
-- [`Spec.md` §8](https://github.com/stringhandler/s-compose/blob/main/Spec.md) —
+- [`Spec.md` §8](https://github.com/stringhandler/tx_manifest_spec/blob/main/Spec.md) —
   the full witness reference.
 - [Multiple spending paths](./06-multiple-spending-paths.md) — using a `PATH`
   selector witness in anger.

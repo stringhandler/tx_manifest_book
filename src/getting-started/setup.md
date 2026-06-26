@@ -1,38 +1,90 @@
 # Setup
 
 To *run* the recipes in this book (not just read them) you need the
-`compose-wallet` CLI, a wallet, and a connection to a Liquid testnet Esplora
+`tx-manifest-wallet` CLI, a wallet, and a connection to a Liquid testnet Esplora
 server.
 
-> **`compose-wallet` is an example implementation of a wallet.** It is a
-> reference tool that consumes compose files and walks through the full
+> **`tx-manifest-wallet` is an example implementation of a wallet.** It is a
+> reference tool that consumes manifests and walks through the full
 > build-and-sign lifecycle so the recipes in this book are runnable. It is not
-> the only way to consume a compose file — any wallet can implement the same
+> the only way to consume a manifest — any wallet can implement the same
 > lifecycle. If you are building your own wallet, see the
 > [Wallet implementation guide](../appendix/wallet-implementation.md) for the
 > execution lifecycle a wallet follows when executing an action.
 
-## Build the CLI
+## Get the CLI
 
-The CLI lives in [`tools/compose-wallet`](https://github.com/stringhandler/s-compose/tree/main/tools/compose-wallet)
-and is a standard Cargo project. From the repository root:
+The wallet binary is `tx-manifest-wallet`. There are four ways to get it; pick
+whichever suits you. **Option 1 (the codespace) is the quickest way to try the
+recipes** — nothing to install.
+
+> **This book aliases the binary to `txw`** purely to keep the commands short and
+> readable. Every command below is written as `txw <subcommand>` — read that as
+> `tx-manifest-wallet <subcommand>` if you prefer the full name. The Blockstream
+> codespace ships the `txw` alias already; with the other options, add it yourself:
+>
+> ```sh
+> alias txw=tx-manifest-wallet
+> ```
+
+### Option 1 — Blockstream Simplicity codespace (no install)
+
+The [Blockstream Simplicity codespace](https://github.com/Blockstream/simplicity-codespace)
+comes with the example wallet preinstalled and already aliased to `txw`, alongside
+the SimplicityHL toolchain. Open it in GitHub Codespaces and you can run the
+recipes immediately — no local setup:
 
 ```sh
-cargo build --manifest-path tools/compose-wallet/Cargo.toml
+txw --help
 ```
 
-Throughout the book commands are written as `cargo run -- <subcommand>`, run from
-inside `tools/compose-wallet`:
+### Option 2 — download a release binary
+
+If you don't want to compile, grab a prebuilt binary from the
+[releases page](https://github.com/stringhandler/txmanifest-wallet/releases).
+Builds are published for Linux (x86_64), macOS (Apple Silicon), and Windows
+(x86_64). Download the archive for your platform, unpack it, and put
+`tx-manifest-wallet` on your `PATH`:
 
 ```sh
-cd tools/compose-wallet
-cargo run -- --help
+# Example: Linux x86_64, release v0.1.0 (substitute the current version)
+curl -LO https://github.com/stringhandler/txmanifest-wallet/releases/download/v0.1.0/tx-manifest-wallet-v0.1.0-x86_64-unknown-linux-gnu.tar.gz
+tar xzf tx-manifest-wallet-v0.1.0-x86_64-unknown-linux-gnu.tar.gz
+sudo mv tx-manifest-wallet /usr/local/bin/
+txw --help
 ```
 
-> If you prefer, build a release binary and call it directly:
-> `cargo build --release` then `./target/release/compose-wallet --help`.
-> The `cargo run --` form is used everywhere below because it always picks up
-> your latest changes.
+> Asset names are version-stamped. The macOS Apple Silicon and Windows builds are
+> `tx-manifest-wallet-<version>-aarch64-apple-darwin.tar.gz` and
+> `tx-manifest-wallet-<version>-x86_64-pc-windows-msvc.zip`. Check the releases
+> page for the exact file name of the latest version.
+
+### Option 3 — asdf
+
+The [`asdf`](https://asdf-vm.com) plugin installs prebuilt release binaries (Linux
+x86_64 and macOS Apple Silicon; asdf is shell-based, so Windows isn't supported):
+
+```sh
+asdf plugin add tx-manifest-wallet https://github.com/stringhandler/asdf-tx-manifest-wallet.git
+asdf install tx-manifest-wallet latest
+asdf set -u tx-manifest-wallet latest
+txw --help
+```
+
+### Option 4 — build from source
+
+The CLI is the [`txmanifest_wallet`](https://github.com/stringhandler/txmanifest-wallet/tree/main/txmanifest_wallet)
+crate of a standard Cargo workspace. From a clone of the repository:
+
+```sh
+cargo build --release          # binary at ./target/release/tx-manifest-wallet
+alias txw="$(pwd)/target/release/tx-manifest-wallet"
+txw --help
+```
+
+Throughout the book, commands are written as `txw <subcommand>`. Manifest paths
+like `examples/p2pk/txmanifest.json` are relative to your current directory — run
+from a clone of the repository (or the codespace) to use the bundled examples.
 
 ## Configure the network and backend
 
@@ -40,14 +92,14 @@ The CLI keeps a small config file with two keys: the default network and the
 default Esplora URL. Set them once:
 
 ```sh
-cargo run -- config default_network testnet
-cargo run -- config default_esplora https://blockstream.info/liquidtestnet/api
+txw config default_network testnet
+txw config default_esplora https://blockstream.info/liquidtestnet/api
 ```
 
 Run `config` with no arguments to print the current values:
 
 ```sh
-cargo run -- config
+txw config
 ```
 
 Most subcommands also accept `--network` and `--esplora` flags to override the
@@ -56,7 +108,7 @@ defaults per-invocation.
 ## Create a wallet
 
 ```sh
-cargo run -- create-wallet --out wallet.json
+txw create-wallet --out wallet.json
 ```
 
 This writes a new HD wallet to `wallet.json`. Add `--mainnet true` for a mainnet
@@ -65,7 +117,7 @@ wallet; by default it follows your configured `default_network`.
 Inspect it — fingerprint, master xpub, oracle key, and a receive address:
 
 ```sh
-cargo run -- info --wallet wallet.json
+txw info --wallet wallet.json
 ```
 
 The wallet derives keys on the BIP86 (taproot) paths the spec expects:
@@ -81,19 +133,34 @@ from the first path; `oracle_key` from the second. (More on this in
 
 ## Fund and sync
 
-Send some Liquid testnet L-BTC to the address printed by `info`. If you don't have
-any, grab some from the [Liquid testnet faucet](https://liquidtestnet.com/faucet).
-Then sync the wallet against Esplora:
+Your new wallet is empty. Fund it with Liquid testnet L-BTC from the faucet:
 
-```sh
-cargo run -- sync --wallet wallet.json
-```
+1. **Get your receive address.** Run `info` and copy the receive address it prints:
+
+   ```sh
+   txw info --wallet wallet.json
+   ```
+
+   Among the output (fingerprint, xpub, oracle key) is a **receive address** — copy
+   that value.
+
+2. **Request coins from the faucet.** Open the
+   [Liquid testnet faucet](https://liquidtestnet.com/faucet), paste your receive
+   address into the address field, and request the funds. The faucet broadcasts a
+   small amount of testnet L-BTC to your wallet.
+
+3. **Sync the wallet** once the faucet transaction has been broadcast, so the CLI
+   picks up the new UTXO from Esplora:
+
+   ```sh
+   txw sync --wallet wallet.json
+   ```
 
 `sync` scans the chain, updates the persisted wallet state, and prints your
 balance. To re-print the last known balance without hitting the network:
 
 ```sh
-cargo run -- get-balance --wallet wallet.json
+txw get-balance --wallet wallet.json
 ```
 
 ## Prepare UTXOs for an action
@@ -103,13 +170,13 @@ subcommand inspects an action and, if the wallet doesn't have enough discrete
 UTXOs, builds and broadcasts a split transaction to create them:
 
 ```sh
-cargo run -- prepare ../../p2pk_simplicity.compose.json Pay --wallet wallet.json
+txw prepare examples/p2pk/txmanifest.json Pay --wallet wallet.json
 ```
 
 You can also split manually:
 
 ```sh
-cargo run -- split -n 4 --asset lbtc --amount-each 10000 --wallet wallet.json
+txw split -n 4 --asset lbtc --amount-each 10000 --wallet wallet.json
 ```
 
 With a funded, synced wallet you're ready for the first recipe:
