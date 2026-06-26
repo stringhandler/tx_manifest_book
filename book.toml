@@ -1,0 +1,17 @@
+[book]
+title = "The SimplicityCompose Cookbook"
+description = "A recipe-driven guide to writing compose files for multi-UTXO Bitcoin and Liquid protocols."
+authors = ["SimplicityCompose contributors"]
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "ayu"
+git-repository-url = "https://github.com/stringhandler/s-compose"
+edit-url-template = "https://github.com/stringhandler/s-compose/edit/main/docs/{path}"
+no-section-label = false
+
+[output.html.fold]
+enable = true
+level = 1
