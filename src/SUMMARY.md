@@ -20,13 +20,17 @@
 - [Covenant UTXO types (draft)](./recipes/05-covenant-utxo-types.md)
 - [Multiple spending paths (draft)](./recipes/06-multiple-spending-paths.md)
 - [Formulas & derived params (draft)](./recipes/07-formulas-and-derived-params.md)
-- [Asset issuance & NFTs (draft)](./recipes/08-issuance-and-nfts.md)
+- [Asset issuance & NFTs](./recipes/08-issuance-and-nfts.md)
 - [Hooks & tapleaf compute (draft)](./recipes/09-hooks-and-tapleaf.md)
 - [Instance, state & constructors (draft)](./recipes/10-instance-state-constructors.md)
 
 # Full Walkthrough
 
 - [The lending protocol (draft)](./walkthrough/lending-protocol.md)
+  - [Issuing the NFTs & encoding terms (draft)](./walkthrough/lending-issuance.md)
+  - [Opening the offer (draft)](./walkthrough/lending-offer.md)
+  - [Accepting or cancelling the offer (draft)](./walkthrough/lending-accept.md)
+  - [Settling: repay, liquidate, withdraw (draft)](./walkthrough/lending-settlement.md)
 
 # Appendix
 

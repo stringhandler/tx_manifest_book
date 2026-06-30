@@ -10,7 +10,7 @@
 > - Hook blocks: `on_resolved` (per input) and `on_pre_broadcast` (per action),
 >   each running `set` assignments in declaration order.
 > - Assignment targets: `compile_params.X`, `params.X`, `args.X`.
-> - The **tapleaf compute spec** (`lang: "tapleaf"`): compiling a `.simf` to a
+> - The **tapleaf compute spec** (`compute: "tapleaf"`): compiling a `.simf` to a
 >   covenant script hash, with `params` and `depends_on`.
 > - **Circular dependencies**: when two covenants each reference the other's hash,
 >   seed with 32 zero bytes and iterate to convergence.

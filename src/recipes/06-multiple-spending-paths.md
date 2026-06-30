@@ -15,5 +15,7 @@
 > - Using `required_index` on inputs so the covenant's introspection lines up.
 > - Cooperative vs unilateral paths, and how they show up in `lifecycle`.
 
-See the `pre_lock` discussion in the
-[lending walkthrough](../walkthrough/lending-protocol.md) in the meantime.
+See the `pre_lock` discussion in
+[Accepting or cancelling the offer](../walkthrough/lending-accept.md) (and the
+`lending` covenant in [Settling the loan](../walkthrough/lending-settlement.md))
+in the meantime.

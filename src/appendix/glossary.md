@@ -42,7 +42,7 @@ PSBT).
 **State file** — The live on-chain UTXO set for one instance
 (`<name>.state.json`), updated after every broadcast.
 
-**Tapleaf compute spec** — A field value (`lang: "tapleaf"`) that compiles a
+**Tapleaf compute spec** — A field value (`compute: "tapleaf"`) that compiles a
 `.simf` file with params to produce a covenant script hash.
 
 **UTXO type** — A named on-chain state with a known script, so a wallet can

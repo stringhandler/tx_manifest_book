@@ -234,24 +234,6 @@ so you never re-enter them. **ColdBreak**:
     },
     { "id": "fee_input", "utxo_source": "wallet", "asset": "lbtc", "optional": true }
   ],
-
-```json
-"ColdBreak": {
-  "inputs": [
-    {
-      "id": "will_in",
-      "utxo_source": { "utxo_type": "last_will" },
-      "witnesses": {
-        "SPEND_PATH": { "type": "simplicityhl", "value": "Right(Left(()))" },
-        "COLD_SIG": {
-          "type": "Signature",
-          "sig_type": "sig_hash_all",
-          "source": { "type": "wallet", "key": "compile_params.COLD_PUB_KEY" }
-        }
-      }
-    },
-    { "id": "fee_input", "utxo_source": "wallet", "asset": "lbtc", "optional": true }
-  ],
   "outputs": [
     { "id": "to_wallet", "destination": "wallet", "asset": "lbtc", "amount_sat": "will_in.amount_sat" },
     { "id": "fee_change", "destination": "change", "asset": "lbtc", "optional": true }
