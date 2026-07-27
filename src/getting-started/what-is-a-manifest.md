@@ -35,23 +35,10 @@ two are introduced in [Instance, state & constructors](../recipes/10-instance-st
 
 ## What a manifest contains
 
-A manifest has a small number of top-level sections:
+Everything a wallet needs to build the protocol's transactions without reading
+the covenant source: the contract types and their compile-time parameters, the
+on-chain states those contracts can create, the valid transactions between them,
+and the state machine tying it together.
 
-- **`classes`** — the contract types. Each class has typed **fields** and
-  **methods**. A class's fields are the contract's *compile-time parameters* —
-  the values baked into its covenant scripts (pubkeys, asset IDs, amounts, expiry
-  heights). Changing a field produces a different script, and therefore a
-  different on-chain address. Field *values* are fixed per deployment and stored
-  in the instance file, not in the manifest.
-- **`utxo_types`** — the on-chain states the protocol can create. Each has a
-  known script so a wallet can recognise these outputs on-chain.
-- **`actions`** (also called *methods*) — the valid transactions. Each one says
-  which UTXOs it consumes, which it produces, the amount formulas, and the
-  witnesses needed to satisfy the covenants. Actions live either inside a class's
-  `methods` or, for simple contracts, at the top level.
-- **`lifecycle`** — documentation-only: named states, the transitions between
-  them, and whether each action is cooperative or unilateral.
-
-
-We dissect each of these in [Anatomy of a manifest](./anatomy.md). But first,
+[Anatomy of a manifest](./anatomy.md) dissects each section in turn. But first,
 let's get the tooling ready.
